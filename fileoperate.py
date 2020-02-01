@@ -1,8 +1,8 @@
 import os
 import shutil
 
-old_name = '编组.png'
-new_name = 'img_new.png'
+old_name = '矩形 2.png'
+new_name = 'home_page_top_bg.png'
 new_path = '/Users/lyf/AndroidStudioProjects/github/PaintArt/app/src/main/res'
 
 

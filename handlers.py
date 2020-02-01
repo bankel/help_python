@@ -17,14 +17,31 @@ def get(path):
 
     return decorator
 
+
 @get('/handle')
 def handle():
     print("name: %s")
+
 
 @get("/do_handle")
 def do_handle(handle):
     pass
 
+
 @get("/do_something")
 def do_something(some):
     pass
+
+
+if __name__ == "__main__":
+    release_path = 'app/build/outputs/apk/release'
+    mapping_path = 'app/build/outputs/mapping/release'
+
+    val = input("input:")
+    if val == "1":
+        print("equal 1")
+    else:
+        print("not equal 1")
+
+
+
