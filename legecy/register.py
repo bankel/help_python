@@ -24,3 +24,4 @@ def add_routes(module_name):
 
 if __name__ == "__main__":
     add_routes('handlers')
+    print()
