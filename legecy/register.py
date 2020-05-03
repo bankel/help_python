@@ -1,6 +1,3 @@
-import handlers
-
-
 def add_routes(module_name):
     n = module_name.rfind('.')
     print("n: %s" % n)
