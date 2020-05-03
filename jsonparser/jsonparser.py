@@ -2,6 +2,7 @@
 
 import re
 import json
+import os
 
 pattern = re.compile(r'(?i)\b((?:https?:\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))')
 
@@ -19,13 +20,21 @@ def parse_jsonfile(json_file):
     url = re.findall(pattern, string)
 
     lists = flatten(url)
-    for item in lists:
-        if item:
-            print(item)
+
+    lists = filter(bool, lists)
+    # for item in lists:
+    #     print(item)
+
+    filter_list = filter(lambda x: (not str(os.path.split(x)[-1]).endswith("pdf")), lists)
+
+    # for item in filter_list:
+    #     print(item)
+    return filter_list
 
 
 if __name__ == "__main__":
     file = "C:/Users/lyf/Desktop/temp"
-    parse_jsonfile(file)
-
+    lists = parse_jsonfile(file)
+    for item in lists:
+        print(item)
 
