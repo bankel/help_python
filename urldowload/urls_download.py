@@ -119,11 +119,16 @@ def download_url():
     if len(args) < 3:
         raise Exception("must provide source file and destination folder")
 
+    print("source %s, destination %s " % (args[1], args[2]))
+
     lists = parse_jsonfile(args[1])
     __download(args[2], lists)
 
 
 def test_sys_args():
+    args = sys.argv
+    for arg in args:
+        print(arg)
     path = os.getcwd()
     print(path)
 
