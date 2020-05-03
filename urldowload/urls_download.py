@@ -1,5 +1,11 @@
 #  coding=utf-8
 
+"""urls_download.py: download url from remote server."""
+
+__author__ = "Banks li"
+__copyright__ = "Copyright 2020, Planet Earth"
+
+
 import json
 import os
 import re
