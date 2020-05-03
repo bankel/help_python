@@ -19,8 +19,6 @@ def parse_jsonfile(json_file):
     url = re.findall(pattern, string)
 
     lists = flatten(url)
-
-    # lists = list(map(lambda m: tuple(filter(bool, m)), url))
     for item in lists:
         if item:
             print(item)
