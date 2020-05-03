@@ -33,11 +33,13 @@ def parse_jsonfile(json_file):
 
     # for item in filter_list:
     #     print(item)
-    return filter_list
+    return list(filter_list)
 
 
-def __download(dir, list):
-    for url in list:
+def __download(dir, url_list):
+    count = 0
+    failed_list = []
+    for url in url_list:
         # name of folder
         try:
 
@@ -51,6 +53,7 @@ def __download(dir, list):
                     os.makedirs(folder)
                 except Exception as e:
                     print("create folder error %s " % e)
+                    failed_list.append(url)
                     raise e
 
             # file to download
@@ -58,6 +61,7 @@ def __download(dir, list):
             local_file = os.path.join(os.path.sep, folder, file_name)
             if os.path.exists(local_file) and os.path.getsize(local_file) > 0:
                 print("%s exists " % file_name)
+                count += 1
                 continue
 
             data = None
@@ -76,11 +80,14 @@ def __download(dir, list):
                         request_time += 1
                         if request_time > 5:
                             print('error response : %s, url: %s' % (res.status_code, url))
+
                             break
                 except Exception as e:
                     print('numbers for request: %s (%s)' % (request_time, e))
+
                     request_time += 1
                     if request_time > 5:
+
                         res = requests.get(url)
                         if res.status_code == 200:
                             data = res.content
@@ -92,11 +99,20 @@ def __download(dir, list):
                 with open(local_file, 'wb') as f:
                     f.write(data)
                     print('download %s to %s successful: ' % (url, local_file))
+                    count += 1
                     time.sleep(0.3)
 
         except Exception as e:
             print('download error:, (%s)' % e)
             continue
+
+    print("successful download %s , failed %s " % (count, len(url_list) - count))
+    if len(failed_list) > 0:
+        print("failed =======:")
+        for fail_url in failed_list:
+            print("failed url %s" % fail_url)
+        print("failed =======:")
+        print("excute again")
 
 
 def get_proxy():
@@ -121,8 +137,8 @@ def download_url():
 
     print("source %s, destination %s " % (args[1], args[2]))
 
-    lists = parse_jsonfile(args[1])
-    __download(args[2], lists)
+    url_lists = parse_jsonfile(args[1])
+    __download(args[2], url_lists)
 
 
 def test_sys_args():
