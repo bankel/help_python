@@ -21,10 +21,10 @@ flatten = lambda *n: (e for a in n
 
 def parse_jsonfile(json_file):
     json_object = json.load(open(json_file))
-    print(type(json_object))
+    # print(type(json_object))
 
     string = json.dumps(json_object)
-    print(type(string))
+    # print(type(string))
 
     url = re.findall(pattern, string)
 
@@ -51,7 +51,10 @@ def parse_jsonfile(json_file):
         temp_list = lists
 
     dif_list = list(set(lists).difference(set(temp_list)))
-    print("difference %s " % dif_list)
+    print("filter---")
+    for dif in dif_list:
+        print(dif)
+    print("filter---")
     print("after filter size %s \n" % len(lists))
     # for item in filter_list:
     #     print(item)
