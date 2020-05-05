@@ -5,7 +5,6 @@
 __author__ = "Banks li"
 __copyright__ = "Copyright 2020, Planet Earth"
 
-
 import json
 import os
 import re
@@ -32,14 +31,31 @@ def parse_jsonfile(json_file):
     lists = flatten(url)
 
     lists = filter(bool, lists)
+    # change filter to list
+    lists = list(lists)
+    print("before filter size %s" % len(lists))
     # for item in lists:
     #     print(item)
 
-    filter_list = filter(lambda x: (not str(os.path.split(x)[-1]).endswith("pdf")), lists)
+    temp_list = []
 
+    args = sys.argv
+    filter_type = ()
+    if len(args) >= 4:
+        filter_type = str(args[3]).split(',')
+        print("download file that is belong to %s " % filter_type)
+
+    if len(filter_type):
+        temp_list = list(x for x in lists if str(x).split('.')[-1].lower() in filter_type)
+    else:
+        temp_list = lists
+
+    dif_list = list(set(lists).difference(set(temp_list)))
+    print("difference %s " % dif_list)
+    print("after filter size %s \n" % len(lists))
     # for item in filter_list:
     #     print(item)
-    return list(filter_list)
+    return temp_list
 
 
 def __download(dir, url_list):
@@ -59,14 +75,14 @@ def __download(dir, url_list):
                     os.makedirs(folder)
                 except Exception as e:
                     print("create folder error %s " % e)
-                    failed_list.append(url)
+
                     raise e
 
             # file to download
             file_name = str(url).split('/')[-1]
             local_file = os.path.join(os.path.sep, folder, file_name)
             if os.path.exists(local_file) and os.path.getsize(local_file) > 0:
-                print("%s exists " % file_name)
+                # print("%s exists " % file_name)
                 count += 1
                 continue
 
@@ -86,7 +102,6 @@ def __download(dir, url_list):
                         request_time += 1
                         if request_time > 5:
                             print('error response : %s, url: %s' % (res.status_code, url))
-
                             break
                 except Exception as e:
                     print('numbers for request: %s (%s)' % (request_time, e))
@@ -107,18 +122,20 @@ def __download(dir, url_list):
                     print('download %s to %s successful: ' % (url, local_file))
                     count += 1
                     time.sleep(0.3)
-
+            else:
+                failed_list.append(url)
         except Exception as e:
             print('download error:, (%s)' % e)
+            failed_list.append(url)
             continue
 
-    print("successful download %s , failed %s " % (count, len(url_list) - count))
+    print("successful download %s , failed %s " % (count, len(failed_list)))
     if len(failed_list) > 0:
         print("failed =======:")
         for fail_url in failed_list:
-            print("failed url %s" % fail_url)
+            print("%s" % fail_url)
         print("failed =======:")
-        print("excute again")
+
 
 
 def get_proxy():
@@ -141,7 +158,14 @@ def download_url():
     if len(args) < 3:
         raise Exception("must provide source file and destination folder")
 
-    print("source %s, destination %s " % (args[1], args[2]))
+    print("source: %s, target folder: %s " % (args[1], args[2]))
+
+    # check source file exists
+    current_work_path = os.getcwd()
+    path = os.path.join(os.path.sep, current_work_path, args[1])
+    if not os.path.exists(path):
+        print("%s is not exists" % path)
+        return
 
     url_lists = parse_jsonfile(args[1])
     __download(args[2], url_lists)
@@ -151,8 +175,14 @@ def test_sys_args():
     args = sys.argv
     for arg in args:
         print(arg)
-    path = os.getcwd()
-    print(path)
+
+    args = sys.argv
+    filter_type = ()
+    if len(args) >= 4:
+        filter_type = str(args[3]).split(',')
+
+    if len(filter_type):
+        print("filter file type %s " % filter_type)
 
 
 if __name__ == "__main__":
