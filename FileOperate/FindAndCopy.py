@@ -2,6 +2,7 @@ import os
 import subprocess
 import shutil
 
+
 def find_and_copy():
     rootpath = "/Users/lyf/Downloads/daxigua-1.0-2.0/res/raw-assets"
     os.chdir(rootpath)
@@ -11,7 +12,6 @@ def find_and_copy():
         "856267d0-6891-4660-a28a-3eb110bf6395.png",
         "d314aef5-920d-44f4-aa26-423c3664acc6.mp3"
     )
-
 
     pendding_command = "find ./ -name {0}"
     for image in images:
